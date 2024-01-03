@@ -5,6 +5,7 @@ from sys import exit
 
 WIDTH  = 1280
 HEIGHT = 720
+SCREEN_COLOR = (230, 50, 230)
 FPS    = 60
 
 class Game:
@@ -24,22 +25,36 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
+            
+            # colors screen
+            self.screen.fill(SCREEN_COLOR)
 
-            self.screen.fill((230, 50, 230))
-
+            # draws characters
             b1.draw(self.screen)
             b2.draw(self.screen)
-            boy.beam(self.screen, b1, b2)
             e1.draw(self.screen)
+            
+            # draws beam
+            boy.beam(self.screen, b1, b2)
+
+            # updates boys
             b1.update()
             b2.update()
 
+            # updates enemy
+            e1.update_velocity(b1, b2)
+            e1.update_position()
+
+            # displays drawn objects
             pygame.display.update()
+
+            # waits 1/FPS seconds
             self.clock.tick(FPS)
+
 
 if __name__ == "__main__":
     game = Game()
     b1 = boy.Boy(300, 300, 255, 255, 255, 1)
     b2 = boy.Boy(100, 100, 0, 0, 0, 2)
-    e1 = enemy.Enemy(400, 400)
+    e1 = enemy.Enemy(400, 400, 0, 0)
     game.run(b1, b2, e1)
